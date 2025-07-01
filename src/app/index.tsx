@@ -1,23 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, StatusBar, Image } from 'react-native';
+
+// simple import for the Button component
 import { Button } from '@/components/button';
+import { TiktokButton } from '@/components/button/tiktokButton';
+import { GithubButton } from '@/components/button/gitButton';
+
+// import for the Expo Linking module to create redirect URLs
 import * as Liking from 'expo-linking'
 
 import * as WebBrowser from 'expo-web-browser';
 import { useOAuth } from '@clerk/clerk-expo';
 
+// import for the Expo Router to handle navigation
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Signing(){
 
+    // Initialize the OAuth hooks for different providers
     const googleOAuth = useOAuth({ strategy: 'oauth_google' });
-    //const linkedinOAuth = useOAuth({ strategy: 'oauth_linkedin' });
     const githubOAuth = useOAuth({ strategy: 'oauth_github' });
     const tiktokSigning = useOAuth({ strategy: 'oauth_tiktok' });
-    const slackSigning = useOAuth({ strategy: 'oauth_slack' });
-
+    
+    // State to manage loading state during sign-in
     const [isLoading, setIsLoading] = useState(false);
 
+    // Functions to handle sign-in for each provider
     async function onGoogleSignIn() {
         try {
 
@@ -64,7 +72,7 @@ export default function Signing(){
             setIsLoading(true);
             const redirectUrl = Liking.createURL('/');
 
-            const oAuthFlow = await slackSigning.startOAuthFlow({ redirectUrl});  
+            const oAuthFlow = await tiktokSigning.startOAuthFlow({ redirectUrl});  
             if (oAuthFlow.authSessionResult?.type === 'success') {
                 if(oAuthFlow.setActive){
                     await oAuthFlow.setActive({ session: oAuthFlow.createdSessionId})
@@ -91,23 +99,26 @@ export default function Signing(){
     return(
         <View style={[styles.container,{gap: 20}]}>
             <StatusBar barStyle='light-content' backgroundColor='#3b3838' hidden={true}/>
-            <Image source={{uri:'https://miro.medium.com/v2/resize:fit:1400/1*GNPSjvfqSPSHoCMNUk4hPA.png'}} style={{width:165, height:45, marginBottom:30}}/>
+            <Image source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnG6N_SAABvc99uhpvkvpXpVDZyuX0Nyaeag&s'}} style={{width:120, height:120, marginBottom:30}}/>
+            <Text style={styles.title}>Implement authentication fast and securely
+                with elegant UI using Clerk.</Text>
+           
             <Button 
                 icon='logo-google'
                 title='Sign in with Google' 
                 isloading={isLoading} 
                 onPress={onGoogleSignIn}
             />
-            <Button 
+            <GithubButton 
                 icon='logo-github'
                 title='Sign in with GitHub' 
                 isloading={isLoading} 
                 onPress={onGithubSignIn}
-                
             />
-            <Button 
-                icon='logo-slack'
-                title='Sign in with tikTok' 
+           
+            <TiktokButton 
+                icon='logo-tiktok'
+                title='Sign in with TikTok' 
                 isloading={isLoading} 
                 onPress={linkedinSigning}
             />
@@ -118,18 +129,21 @@ export default function Signing(){
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 100,
+        paddingTop: 200,
        // justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#d3bf08',
+        backgroundColor: '#101010eb',
     },
     text: {
         fontSize: 20,
-        color: '#333',
+        color: '#fff',
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
+        paddingHorizontal: 40,
+        textAlign: 'center',
+        color: '#fff',
     },
 });

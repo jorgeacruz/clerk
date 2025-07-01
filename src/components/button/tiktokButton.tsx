@@ -7,7 +7,7 @@ interface buttonProps extends TouchableOpacityProps {
     icon: keyof typeof Ionicons.glyphMap;
 }
 
-export function Button({ 
+export function TiktokButton({ 
             title, 
             isloading = false, 
             icon, 
@@ -20,7 +20,7 @@ export function Button({
             alignItems: 'center',
             justifyContent: 'center',
             width: '80%',
-            backgroundColor: '#F4B400', 
+            backgroundColor: '#0F9D58', 
             padding: 10, 
             borderRadius: 5
             }}>
